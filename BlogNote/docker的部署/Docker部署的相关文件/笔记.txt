@@ -1,0 +1,115 @@
+
+docker远程仓库的配置
+{
+  "registry-mirrors": [
+    "https://registry.docker-cn.com",
+    "http://hub-mirror.c.163.com",
+    "https://docker.mirrors.ustc.edu.cn"
+  ],
+  "insecure-registries": [],
+  "debug": false,
+  "experimental": false,
+  "features": {
+    "buildkit": true
+  },
+  "builder": {
+    "gc": {
+      "enabled": true,
+      "defaultKeepStorage": "20GB"
+    }
+  }
+}
+
+
+JCjc1997！
+
+
+要有Container首先要有Image，也就是说Container是通过image创建的。
+Container是在原先的Image之上新加的一层，称作Container layer，这一层是可读可写的（Image是只读的）。
+在面向对象的编程语言中，有类跟对象的概念。类是抽象的，对象是类的具体实现。Image跟Container可以类比面向对象中的类跟对象，Image就相当于抽象的类，Container就相当于具体实例化的对象。
+Image跟Container的职责区别：Image负责APP的存储和分发，Container负责运行APP。
+
+
+为了能够保存（持久化）数据以及共享容器间的数据，Docker提出了Volume的概念。简单来说，Volume就是目录或者文件，它可以绕过默认的联合文件系统，而以正常的文件或者目录的形式存在于宿主机上。
+
+
+
+
+
+部署springboot：
+
+1.编辑Dockerfile文件 （选中文件右键打开方式->记事本）
+FROM java:8 (如果自己没下java:8,自己会下载)
+MAINTAINER gq<gq@163.com>
+ADD day01-0.0.1-SNAPSHOT.jar gq.jar (改成自己的jar包名)
+CMD java -jar gq.jar
+2.把jar包和Dockerfile文件放到一个文件夹下面，为了方便操作
+
+1.进入文件夹下面打开终端输入docker build -f .\java_project -t demo .
+2.通过build的命令去部署 -f 需要构建的Dockerfile文件的位置 -t 设置新的镜像的名称和版本号，也可以写成docker build -f .\java_project -t demo:.0 .，最后那个.是代表寻址的路径其实是在指定镜像构建过程中的上下文环境的目录
+
+docker会分层构建直到出现 Successfully字样就说明构建成功，使用docker images 查看镜像
+
+
+
+
+出现错误，拒绝连接。应该是开放容器端口到宿主机端口9091没有开放权限，被docker防火墙拦截了，所以接下来就对9091端口开放访问权限
+方法：
+首先 执行exit 退出容器
+将已启动得容器停止并删除
+docker stop 9372df2e5f57
+docker rm 9372df2e5f57
+执行以下命令重新执行
+*docker run --privileged=true -d -p 9091:9091/tcp --name 指定容器名（自定义)  镜像名
+
+
+
+
+
+
+
+部署Vue：
+
+上传dist文件夹到服务器，并编辑Dockerfile文件
+
+# 设置基础镜像，这里使用最新的nginx镜像，前面已经拉取过了
+FROM nginx
+# 定义作者 deroy
+MAINTAINER deroy 
+# 将dist文件中的内容复制到 /usr/share/nginx/html/ 这个目录下面
+COPY dist/  /usr/share/nginx/html/
+
+
+
+
+
+docker build -t dockervue .
+
+docker run --name=dockervue -d -p 7681:80 dockervue
+
+
+
+
+
+
+
+
+
+
+
+
+
+nginx：
+	
+
+
+
+
+
+
+
+
+
+
+
+

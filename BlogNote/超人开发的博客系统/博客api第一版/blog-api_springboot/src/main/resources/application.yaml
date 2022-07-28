@@ -1,0 +1,42 @@
+
+server:
+  port: 8098
+
+#应用名
+spring:
+  application:
+    name: blog-api
+  main:
+      allow-circular-references: true
+  #    数据库
+  datasource:
+    url: jdbc:mysql://localhost/blog
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+#    上传文件的尺寸大小
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 20MB
+#解决swagger2与springboot版本不兼容的问题
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+
+
+#mybatis-plus
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      table-prefix: ms_
+  mapper-locations:
+    - classpath*:/com.example.blogapi_springboot.dao.mapper/*.xml
+
+
+#配置redis
+spring.redis.host: localhost
+spring.redis.port: 6379

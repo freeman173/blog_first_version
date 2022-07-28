@@ -1,0 +1,5 @@
+FROM java:8
+MAINTAINER itfeng<xxxxxx666@163.com> 
+
+ADD dockerdemo-0.0.1-SNAPSHOT.jar app.jar 
+CMD java -jar app.jar  #定义容器启动执行的命令 app.jar的名字可自取

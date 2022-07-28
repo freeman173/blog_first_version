@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 为了让tag_name与tagName相对应，将名称改为一致-->
+<mapper namespace="com.example.blogapi_springboot.dao.mapper.TagMapper">
+    <select id="findTagsByArticleId" parameterType="Long" resultType="com.example.blogapi_springboot.dao.pojo.Tag">
+
+            select id,avatar,tag_name as tagName from ms_tag
+            where id in
+            (select tag_id from ms_article_tag where article_id=#{articleId})
+    </select>
+
+    <select id="findHotsTagIds" parameterType="Integer" resultType="java.lang.Long">
+        select tag_id  from ms_article_tag group by tag_id order by count(article_id) desc  limit #{limit}
+
+    </select>
+
+<!--    因为在id属性里面多打了一个空格，导致异常，真的是无语！！-->
+    <select id="findTagsByTagIds" parameterType="list" resultType="com.example.blogapi_springboot.dao.pojo.Tag">
+       select id,tag_name as tagName from ms_tag
+       where id in
+       <foreach collection="tagIds" item="tagId" separator="," open="(" close=")">
+           #{tagId}
+       </foreach>
+
+    </select>
+
+</mapper>

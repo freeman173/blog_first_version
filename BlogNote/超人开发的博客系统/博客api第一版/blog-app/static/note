@@ -1,0 +1,8 @@
+如何在控制台调试vue：
+  在 mounted() 方法中将 this 的值赋值给 window.vue：
+      mounted() {
+          window.vue = this
+      }
+  在 Chrome 的控制台中打印 Vue 项目的属性值
+
+
